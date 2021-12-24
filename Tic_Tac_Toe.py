@@ -6,18 +6,21 @@ board = [
     ["-", "-", "-"]
 ]
 
+#This function prints the board when called
 def print_board(board):
     for row in board:
         for slot in row:
             print(f"{slot} ", end="")
         print()
 
+#Detects if the user enters 'q' to end the game
 def quit_game(user_input):
     if user_input.lower() == "q":
         print("Thanks for playing! I hope you enjoyed the game.")
         return True
     else: return False
 
+#checks that the user input is numeric and less than 9    
 def number_check(user_input):
     if user_input.isnumeric() and int(user_input) <= 9: return True
     elif user_input.isnumeric() and int(user_input) >= 9:
@@ -26,22 +29,24 @@ def number_check(user_input):
     else:
         print("This is not a number.")
         return False
-
+#Transform the user input into coordinates on the board.
 def coordinates(user_input):
     row = int((user_input - 1) / 3)
     column = (user_input - 1) % 3
     return (row, column)
 
+#checks that the user entry wasn't used before.
 def exist_check(position, board):
     if board[position[0]][position[1]] != "-":
         print("This move already exists. Enter a different move.")
         return True
     else:
         return False
-
+#write to the board.
 def write_board(position, board, symbol):
     board[position[0]][position[1]] = symbol
 
+#Computer turn
 def comp_turn(board):
     print("\nYour turn: \n")
     print_board(board)
@@ -54,6 +59,7 @@ def comp_turn(board):
             write_board(comp_position, board, "O")
             break
 
+#Checks every row and column for a win            
 def check_row_col(board, symbol):
    is_win = False
    for i in range(3):
@@ -68,6 +74,7 @@ def check_row_col(board, symbol):
 
    if is_win: return True
 
+#checks diagonal win
 def check_diag(board, symbol):
     if board[0][0] == symbol and board[1][1] == symbol and board[2][2] == symbol:
         return True
@@ -76,12 +83,14 @@ def check_diag(board, symbol):
     else:
         return False
 
+#call the previous two functions and return results    
 def check_win(board, symbol):
     row_col_check = check_row_col(board, symbol)
     diagonal_check = check_diag(board, symbol)
     if row_col_check or diagonal_check: return True
     else: return False
 
+#Checks a tie at the end of the game    
 def check_tie(board):
     is_tie = True
     for i in range(3):
@@ -91,6 +100,7 @@ def check_tie(board):
                 break
     return is_tie
 
+#The game
 while True:
     print_board(board)
     user_input = input("Please enter your move 1 thru 9. If you want to quit enter \"q\". ")
@@ -110,7 +120,6 @@ while True:
         print_board(board)
         print("Its a Tie! Try again!")
         break
-
     comp_turn(board)
     if check_win(board, "O"):
         print_board(board)
